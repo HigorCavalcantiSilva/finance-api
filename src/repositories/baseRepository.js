@@ -3,7 +3,8 @@ const prisma = new PrismaClient();
 
 class BaseRepository {
   constructor(model) {
-    this.model = model; // Recebe o nome do modelo Prisma
+    this.model = model;
+    this.prisma_model = prisma[model];
   }
 
   async create(data) {

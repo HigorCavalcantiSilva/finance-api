@@ -19,7 +19,7 @@ model User {
   email      String
   sex        Sex
   password   String?
-  active     Boolean
+  active     Boolean @default(true)
   created_at DateTime @default(now())
 }
 

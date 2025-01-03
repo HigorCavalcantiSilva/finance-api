@@ -1,30 +1,45 @@
 const BaseService = require('./baseService');
 const Password = require('../utils/password')
-const userRepository = require('../repositories/userRepository');
+const JWT = require('../utils/jwt')
+const UserRepository = require('../repositories/userRepository');
 
 class UserService extends BaseService {
     constructor() {
-      super(userRepository);
+      super(UserRepository);
     }
 
     async create(data) {
-      // Lógica adicional antes de criar o usuário
-      if (!data.email) {
-          throw new Error('Email is required to create a user.');
-      }
-
       // Verificar se o email já existe
-      const existingUser = await this.model.findUnique({
-          where: { email: data.email },
+      const existingUser = await this.repository.prisma_model.findFirst({
+        where: { email: data.email },
       });
 
       if (existingUser) {
-          throw new Error('A user with this email already exists.');
+        throw new Error('A user with this email already exists.');
       }
 
-      // Chamando o método `create` da classe base
+      data.password = await Password.hashPassword(data.password);
+
       return super.create(data);
+    }
+
+    async login(data) {
+      const existingUser = await this.repository.prisma_model.findFirst({
+        where: { email: data.email },
+      });
+
+      if (!existingUser) {
+        throw new Error('A user with this email already exists.');
+      }
+
+      if(!await Password.verifyPassword(data.password, existingUser.password)) {
+        throw new Error('Password incorrect.');
+      }
+
+      const token = JWT.createToken({userId: existingUser.id, username: existingUser.userName});
+
+      return token;
     }
 }
 
-module.exports = UserService;
+module.exports = new UserService();
