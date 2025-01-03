@@ -3,25 +3,25 @@ class BaseService {
         this.repository = repository;
     }
 
-    async createUser(data) {
+    async create(data) {
         return await this.repository.create(data);
     }
 
-    async getAllUsers() {
+    async getAll() {
         return await this.repository.findAll();
     }
 
-    async getUserById(id) {
+    async getById(id) {
         return await this.repository.findById(id);
     }
 
-    async updateUser(id, data) {
+    async update(id, data) {
         return await this.repository.update(id, data);
     }
 
-    async deleteUser(id) {
+    async delete(id) {
         return await this.repository.delete(id);
     }
 }
 
-module.exports = new UserService();
+module.exports = BaseService;

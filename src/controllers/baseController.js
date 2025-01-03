@@ -57,4 +57,4 @@ class BaseController {
   }
 }
 
-module.exports = new Controller();
+module.exports = BaseController;
