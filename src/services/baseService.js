@@ -12,15 +12,15 @@ class BaseService {
     }
 
     async getById(id) {
-        return await this.repository.findById(id);
+        return await this.repository.findById(parseInt(id));
     }
 
     async update(id, data) {
-        return await this.repository.update(id, data);
+        return await this.repository.update(parseInt(id), data);
     }
 
     async delete(id) {
-        return await this.repository.delete(id);
+        return await this.repository.delete(parseInt(id));
     }
 }
 
