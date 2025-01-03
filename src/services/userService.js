@@ -29,7 +29,7 @@ class UserService extends BaseService {
       });
 
       if (!existingUser) {
-        throw new Error('A user with this email already exists.');
+        throw new Error('User with this email not exists.');
       }
 
       if(!await Password.verifyPassword(data.password, existingUser.password)) {
