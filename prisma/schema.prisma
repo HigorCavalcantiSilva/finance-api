@@ -14,16 +14,122 @@ datasource db {
 }
 
 model User {
-  id         Int     @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   username   String
   email      String
   sex        Sex
   password   String?
-  active     Boolean @default(true)
+  active     Boolean  @default(true)
   created_at DateTime @default(now())
+
+  salaries              Salary[]
+  earnings              Earning[]
+  expences              Expence[]
+  balances              MonthlyBalance[]
+  savings               Saving[]
+  MonthlyBalanceEarning MonthlyBalanceEarning[]
+  MonthlyBalanceExpence MonthlyBalanceExpence[]
 }
 
 enum Sex {
   M
   F
+}
+
+model Salary {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  user           User     @relation(fields: [userId], references: [id])
+  grossSalary    Float
+  netSalary      Float
+  followedUserId Int?
+  active         Boolean
+  createdAt      DateTime @default(now())
+}
+
+model Earning {
+  id                    Int                     @id @default(autoincrement())
+  userId                Int
+  user                  User                    @relation(fields: [userId], references: [id])
+  name                  String
+  description           String
+  value                 Float
+  appellant             Boolean
+  deadline              Boolean
+  active                Boolean
+  createdAt             DateTime                @default(now())
+  MonthlyBalanceEarning MonthlyBalanceEarning[]
+}
+
+model Expence {
+  id                    Int                     @id @default(autoincrement())
+  userId                Int
+  user                  User                    @relation(fields: [userId], references: [id])
+  name                  String
+  description           String
+  value                 Float
+  appellant             Boolean
+  deadline              Boolean
+  active                Boolean
+  createdAt             DateTime                @default(now())
+  MonthlyBalanceExpence MonthlyBalanceExpence[]
+}
+
+model MonthlyBalance {
+  id              Int                     @id @default(autoincrement())
+  userId          Int
+  user            User                    @relation(fields: [userId], references: [id])
+  month           DateTime
+  salary          Float
+  earningsFixes   Float
+  earningsExtras  Float
+  expensesFixes   Float
+  expensesExtras  Float
+  leftover        Float
+  active          Boolean
+  createdAt       DateTime                @default(now())
+  savings         Saving[]
+  balanceEarnings MonthlyBalanceEarning[]
+  balanceExpences MonthlyBalanceExpence[]
+}
+
+model MonthlyBalanceEarning {
+  id               Int            @id @default(autoincrement())
+  userId           Int
+  user             User           @relation(fields: [userId], references: [id])
+  earningId        Int
+  earning          Earning        @relation(fields: [earningId], references: [id])
+  monthlyBalanceId Int
+  monthlyBalance   MonthlyBalance @relation(fields: [monthlyBalanceId], references: [id])
+  name             String
+  description      String
+  value            Float
+  active           Boolean
+  createdAt        DateTime       @default(now())
+}
+
+model MonthlyBalanceExpence {
+  id               Int            @id @default(autoincrement())
+  userId           Int
+  user             User           @relation(fields: [userId], references: [id])
+  expenceId        Int
+  expence          Expence        @relation(fields: [expenceId], references: [id])
+  monthlyBalanceId Int
+  monthlyBalance   MonthlyBalance @relation(fields: [monthlyBalanceId], references: [id])
+  name             String
+  description      String
+  value            Float
+  active           Boolean
+  createdAt        DateTime       @default(now())
+}
+
+model Saving {
+  id               Int            @id @default(autoincrement())
+  userId           Int
+  user             User           @relation(fields: [userId], references: [id])
+  monthlyBalanceId Int
+  monthlyBalance   MonthlyBalance @relation(fields: [monthlyBalanceId], references: [id])
+  value            Float
+  active           Boolean
+  createdAt        DateTime       @default(now())
 }
