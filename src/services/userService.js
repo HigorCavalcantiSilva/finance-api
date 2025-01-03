@@ -38,7 +38,7 @@ class UserService extends BaseService {
 
       const token = JWT.createToken({userId: existingUser.id, username: existingUser.userName});
 
-      return token;
+      return { token, id: existingUser.id };
     }
 }
 
