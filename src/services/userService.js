@@ -40,6 +40,12 @@ class UserService extends BaseService {
 
       return { token, id: existingUser.id };
     }
+
+    validateToken(data) {
+      const tokenValid = JWT.verifyToken(data.token);
+
+      return tokenValid;
+    }
 }
 
 module.exports = new UserService();

@@ -6,6 +6,7 @@ const UserController = require('../controllers/userController');
 
 // Rotas públicas
 router.post('/login', UserController.login);
+router.post('/validate-token', UserController.validateToken);
 router.post('/', UserController.create);
 
 // Rotas protegidas

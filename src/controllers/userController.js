@@ -64,9 +64,22 @@ class UserController {
     try {
       const token = await this.service.login(req.body);
       if (token) {
-        res.status(200).json({token});
+        res.status(200).json(token);
       } else {
         res.status(404).json({ error: 'email or password incorrect' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  validateToken(req, res) {
+    try {
+      const token = this.service.validateToken(req.body);
+      if (token) {
+        res.status(200).json(true);
+      } else {
+        res.status(401).json(false);
       }
     } catch (error) {
       res.status(500).json({ error: error.message });
